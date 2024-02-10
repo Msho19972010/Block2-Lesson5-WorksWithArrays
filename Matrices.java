@@ -264,62 +264,8 @@ public class Matrices {
          * @return значение определителя матрицы
          */
         public int determinant() {
-            int det = 0;
-            int result = 0;
-
-            if(nRows == 1) {
-                result = rows[0][0];
-
-            } else if(nRows == 2) {
-                result = rows[0][0] * rows[1][1] - rows[1][0] * rows[0][1];
-
-            } else if (nRows >= 3) {
-//                for(int iRow = 0; iRow < nRows; iRow++) {
-//                    Matrix newMatrix = new Matrix(nRows - 1,nCols - 1);
-//
-//                    for(int iCol = 0; iCol < nCols - 1; iCol++) {
-//
-//                        for(int i = 0; i < 2; i++) {
-//                            if(iCol == 0) {
-//                                newMatrix.rows[iCol][i] = rows[iCol + 1][i + 1];
-//                            } else {
-//                                if(i == 0) {
-//                                    newMatrix.rows[iCol][i] = rows[iCol][i];
-//                                } else {
-//                                    newMatrix.rows[iCol][i] = rows[iCol][i + 1];
-//                                }
-//                            }
-//                        }
-//                        int j = (int) Math.pow(-1, (double) iCol + 1);
-//                        det += j * newMatrix.rows[0][0] * newMatrix.rows[1][1] - newMatrix.rows[1][0] * newMatrix.rows[0][1];
-//                    }
-
-                 for(int iCol = 0; iCol < nCols; iCol++) {
-                     if(iCol == 0) {
-                         int num = rows[0][iCol];
-                         int sum1 = rows[1][iCol + 1] * rows[2][iCol + 2];
-                         int sum2 = rows[1][iCol + 2] * rows[2][iCol + 1];
-                         int sum3 = sum1 - sum2;
-                         det = num * sum3 - det;
-                     } else if(iCol == 1) {
-                         int num = rows[0][iCol];
-                         int sum1 = rows[1][iCol - 1] * rows[2][iCol + 1];
-                         int sum2 = rows[1][iCol + 1] * rows[2][iCol - 1];
-                         int sum3 = sum1 - sum2;
-                         det -= num * sum3;
-                     } else {
-                         int num = rows[0][iCol];
-                         int sum1 = rows[1][iCol - 2] * rows[2][iCol - 1];
-                         int sum2 = rows[1][iCol - 1] * rows[2][iCol - 2];
-                         int sum3 = sum1 - sum2;
-                         det += num * sum3;
-                     }
-
-                    result = det;
-                 }
-            }
             
-            return result;
+            return determinant(rows);
         }
 
         /**
@@ -337,37 +283,36 @@ public class Matrices {
 
             // Базовый случай для матрицы 2x2
             if (matrix.length == 2) {
-                int det = matrix[0][0] * matrix[1][1] - matrix[1][0] * matrix[0][1];
-                return det;
+                return matrix[0][0] * matrix[1][1] - matrix[1][0] * matrix[0][1];
             }
 
             int result = 0;
+
             // Итерация по элементам первой строки матрицы
             for (int i = 0; i < matrix.length; i++) {
+                int nRow = 0;
+
                 // Создание матрицы для поддетерминанта
                 int[][] smallerMatrix = new int[matrix.length - 1][matrix.length - 1];
-                for(int iRow = 0; iRow < matrix.length; iRow++) {
 
-                    for (int iCol = 0; iCol < matrix.length - 1; iCol++) {
+                // Заполнение smallerMatrix нужными значениями из matrix
 
-                        for (int j = 0; j < 2; j++) {
-                            
-                            if (iCol == 0) {
-                                matrix[iCol][j] = matrix[iCol + 1][j + 1];
+                for(int iRow = 1; iRow < matrix.length; iRow++) {
+                    int nCol = 0;
 
-                            } else if (iCol == matrix.length - 1) {
-                                matrix[iCol][j] = matrix[iCol][i];
+                    for(int iCol = 0; iCol < matrix.length; iCol++) {
 
-                            } else {
-                                if (j == 0) {
-                                    matrix[iCol][j] = matrix[iCol][i];
-                                } else {
-                                    matrix[iCol][i] = matrix[iCol][j+ 1];
-                                }
-                            }
+                        if(iCol == i) {
+                            continue;
+                        } else {
+                            smallerMatrix[nRow][nCol] = matrix[iRow][iCol];
+                            nCol++;
                         }
+
                     }
-                }// Заполнение smallerMatrix нужными значениями из matrix
+
+                    nRow++;
+                }
 
                 // Вычисление поддетерминанта рекурсивным вызовом
                 int subDeterminant = determinant(smallerMatrix);
