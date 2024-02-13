@@ -264,7 +264,12 @@ public class Matrices {
          * @return значение определителя матрицы
          */
         public int determinant() {
-            
+            try {
+                determinant(rows);
+            } catch (Exception e) {
+                System.out.println("Something went wrong, please check the vectors' length, they have to be equal.");
+            }
+
             return determinant(rows);
         }
 
@@ -296,7 +301,6 @@ public class Matrices {
                 int[][] smallerMatrix = new int[matrix.length - 1][matrix.length - 1];
 
                 // Заполнение smallerMatrix нужными значениями из matrix
-
                 for(int iRow = 1; iRow < matrix.length; iRow++) {
                     int nCol = 0;
 
@@ -310,7 +314,6 @@ public class Matrices {
                         }
 
                     }
-
                     nRow++;
                 }
 
@@ -323,8 +326,10 @@ public class Matrices {
                 // Обновление результата с учетом элемента i разложения, его знака и поддетерминанта
                 result += sign * matrix[0][i] * subDeterminant;
             }
+
             return result;
-        }
+            }
+
 
     }
 
